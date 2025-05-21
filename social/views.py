@@ -1,5 +1,5 @@
 from django.db.models import Prefetch
-from rest_framework import viewsets
+from rest_framework import viewsets, filters
 
 from social.models import Post, Comment
 from social.serializers import (
@@ -14,6 +14,8 @@ from social.serializers import (
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
+    filterset_fields = [filters.SearchFilter]
+    search_fields = ["title"]
 
     def get_queryset(self):
         return Post.objects.select_related("author").prefetch_related(
