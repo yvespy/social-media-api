@@ -20,6 +20,7 @@ from users.serializers import (
 
 class MyTokenObtainPairView(TokenObtainPairView):
     serializer_class = MyTokenObtainPairSerializer
+    permission_classes = (AllowAny,)
 
 
 class RegisterView(generics.CreateAPIView):
@@ -49,7 +50,7 @@ class UserViewSet(
 
 
 class UserFollowingViewSet(viewsets.ModelViewSet):
-    permission_classes = (IsAuthenticatedOrReadOnly,)
+    permission_classes = (IsAuthenticated,)
     serializer_class = FollowingSerializer
     queryset = UserFollowing.objects.all()
 
@@ -87,7 +88,7 @@ class UserFollowingViewSet(viewsets.ModelViewSet):
 
 class UserFollowersList(generics.ListAPIView):
     serializer_class = FollowersSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_id = self.kwargs["pk"]
@@ -96,7 +97,7 @@ class UserFollowersList(generics.ListAPIView):
 
 class UserFollowingList(generics.ListAPIView):
     serializer_class = FollowingSerializer
-    permission_classes = [IsAuthenticatedOrReadOnly]
+    permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
         user_id = self.kwargs["pk"]

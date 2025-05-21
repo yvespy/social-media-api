@@ -1,7 +1,9 @@
 from django.db.models import Prefetch
 from rest_framework import viewsets, filters
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
 from social.models import Post, Comment
+from social.permissions import IsAuthorOrReadOnly
 from social.serializers import (
     PostSerializer,
     CommentSerializer,
@@ -14,6 +16,7 @@ from social.serializers import (
 
 class PostViewSet(viewsets.ModelViewSet):
     queryset = Post.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
     filterset_fields = [filters.SearchFilter]
     search_fields = ["title"]
 
@@ -38,6 +41,7 @@ class PostViewSet(viewsets.ModelViewSet):
 
 class CommentViewSet(viewsets.ModelViewSet):
     queryset = Comment.objects.all()
+    permission_classes = [IsAuthenticatedOrReadOnly, IsAuthorOrReadOnly]
 
     def get_queryset(self):
         return Comment.objects.select_related("author", "post")
