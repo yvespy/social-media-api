@@ -1,6 +1,8 @@
 from django.urls import path
 from rest_framework.routers import SimpleRouter
 from rest_framework_simplejwt import views as jwt_views
+from rest_framework_simplejwt.views import TokenBlacklistView
+
 from users.views import (
     RegisterView,
     ProfileViewSet,
@@ -25,4 +27,5 @@ urlpatterns = [
     ),
     path("<int:pk>/followers/", UserFollowersList.as_view(), name="followers"),
     path("<int:pk>/following/", UserFollowingList.as_view(), name="following"),
+    path("logout/", TokenBlacklistView.as_view(), name="token_blacklist"),
 ] + router.urls
