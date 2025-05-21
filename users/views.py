@@ -1,4 +1,4 @@
-from rest_framework import generics, mixins, viewsets, serializers
+from rest_framework import generics, mixins, viewsets, serializers, filters
 from rest_framework.decorators import action
 from rest_framework.permissions import (
     AllowAny,
@@ -38,10 +38,14 @@ class ProfileViewSet(
         return self.request.user
 
 
-class UserViewSet(mixins.RetrieveModelMixin, viewsets.GenericViewSet):
+class UserViewSet(
+    mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
+):
     queryset = User.objects.all()
     serializer_class = ProfileSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
+    filter_backends = [filters.SearchFilter]
+    search_fields = ["username", "email", "first_name", "last_name"]
 
 
 class UserFollowingViewSet(viewsets.ModelViewSet):
