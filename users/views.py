@@ -16,6 +16,7 @@ from users.serializers import (
     MyTokenObtainPairSerializer,
     FollowersSerializer,
     FollowingSerializer,
+    UserSerializer,
 )
 
 
@@ -78,10 +79,16 @@ class UserViewSet(
     mixins.RetrieveModelMixin, mixins.ListModelMixin, viewsets.GenericViewSet
 ):
     queryset = User.objects.all()
-    serializer_class = ProfileSerializer
+    serializer_class = UserSerializer
     permission_classes = [AllowAny]
     filter_backends = [filters.SearchFilter]
     search_fields = ["username", "email", "first_name", "last_name"]
+
+    def get_queryset(self):
+        return User.objects.all().prefetch_related(
+            "following__following_user",
+            "followers__user",
+        )
 
     @extend_schema(
         summary="List users",
@@ -192,7 +199,9 @@ class UserFollowersList(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs["pk"]
-        return UserFollowing.objects.filter(following_user__id=user_id)
+        return UserFollowing.objects.filter(following_user__id=user_id).select_related(
+            "user", "following_user"
+        )
 
 
 class UserFollowingList(generics.ListAPIView):
@@ -217,4 +226,6 @@ class UserFollowingList(generics.ListAPIView):
 
     def get_queryset(self):
         user_id = self.kwargs["pk"]
-        return UserFollowing.objects.filter(user__id=user_id)
+        return UserFollowing.objects.filter(user__id=user_id).select_related(
+            "user", "following_user"
+        )

@@ -56,17 +56,17 @@ http://localhost:8000/api/schema/swagger-ui/
 (OpenAPI via drf-spectacular)
 ## Endpoints Overview
 ### Auth
-- (`POST /api/register/`) - Register new user 
-- (`POST /api/token/`) - Get JWT token
-- (`POST /api/token/refresh/`) - Refresh token
+- (`POST /api/users/register/`) - Register new user 
+- (`POST /api/users/token/`) - Get JWT token
+- (`POST /api/users/token/refresh/`) - Refresh token
 
 ### Users
 - (`GET /api/users/`) - List/search users 
 - (`GET /api/users/<id>/`) - Retrieve user profile
 
 ### Profile (own)
-- (`GET /api/profile/`) - Get current user's profile 
-- (`PATCH /api/profile/`) - Update current user's profile
+- (`GET /api/users/profile/`) - Get current user's profile 
+- (`PATCH /api/users/profile/`) - Update current user's profile
 
 ### Followers / Following
 - (`POST /api/follow/`) - Follow a user 
