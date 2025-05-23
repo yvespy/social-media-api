@@ -38,7 +38,12 @@ pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
 ```
+2. **Running with Docker**
 
+```bash
+docker build -t social-api .
+docker run -d -p 8000:8000 --name social-api-container social-api
+```
 ## Authentication
 
 This API uses JWT (JSON Web Tokens).
